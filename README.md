@@ -9,6 +9,8 @@ This Repo implements the basic building blocks of Deep Residual Networks which i
 As a Neural Network gets very deep, vanishing / exploding gradients become a huge problem. ResNet solves this by using “Skip Connections” where layer 1 output goes directly to layer N input.
 
 The concept of “Residual Block”:
+
+
 ![residualblock](https://user-images.githubusercontent.com/99212200/190844348-091fd65a-27b7-4d45-94e4-a36b77ce2f61.png)
 
 # References
