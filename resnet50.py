@@ -1,6 +1,10 @@
 from blocks import *
 
-def ResNet50(input_shape = (64, 64, 3), classes = 6):
+def ResNet50(input_shape = (64, 64, 3), 
+             weights='imagenet',
+             classes = 1000,
+             include_top = True, 
+             pooling = None):
     """
     Stage-wise implementation of the architecture of the popular ResNet50:
     CONV2D -> BATCHNORM -> RELU -> MAXPOOL -> CONVBLOCK -> IDBLOCK*2 -> CONVBLOCK -> IDBLOCK*3
@@ -13,7 +17,8 @@ def ResNet50(input_shape = (64, 64, 3), classes = 6):
     Returns:
     model -- a Model() instance in Keras
     """
-    
+    WEIGHTS_PATH = 'https://github.com/fchollet/deep-learning-models/releases/download/v0.2/resnet50_weights_tf_dim_ordering_tf_kernels.h5'
+    WEIGHTS_PATH_NO_TOP = 'https://github.com/fchollet/deep-learning-models/releases/download/v0.2/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5'
 
     X_input = Input(input_shape)
 
@@ -53,11 +58,30 @@ def ResNet50(input_shape = (64, 64, 3), classes = 6):
     X = AveragePooling2D((2, 2))(X) 
 
     # output layer
-    X = Flatten()(X)
-    X = Dense(classes, activation='softmax', kernel_initializer = glorot_uniform(seed=0))(X)
-    
+    if include_top:
+        X = Flatten()(X)
+        X = Dense(classes, activation='softmax', kernel_initializer = glorot_uniform(seed=0))(X)
+    else:
+        if pooling == 'avg':
+            x = GlobalAveragePooling2D()(X)
+        elif pooling == 'max':
+            x = GlobalMaxPooling2D()(X)    
     
     # Create model
     model = Model(inputs = X_input, outputs = X)
-
+    
+    if weights == 'imagenet':
+        if include_top:
+            weights_path = get_file('resnet50_weights_tf_dim_ordering_tf_kernels.h5',
+                                    WEIGHTS_PATH,
+                                    cache_subdir='models',
+                                    md5_hash='a7b3fe01876f51b976af0dea6bc144eb')
+        else:
+            weights_path = get_file('resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5',
+                                    WEIGHTS_PATH_NO_TOP,
+                                    cache_subdir='models',
+                                    md5_hash='a268eb855778b3df3c7506639542a6af')
+            
+        model.load_weights(weights_path)
+        
     return model
