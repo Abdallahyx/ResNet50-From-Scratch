@@ -1,4 +1,5 @@
 from blocks import *
+from keras.utils.data_utils import get_file
 
 def ResNet50(input_shape = (64, 64, 3), 
              weights='imagenet',
