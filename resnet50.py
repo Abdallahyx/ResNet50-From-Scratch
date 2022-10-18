@@ -1,8 +1,8 @@
 from blocks import *
-from tensorflow.keras.utils.data_utils import get_file
+from keras.utils.data_utils import get_file
 
 def ResNet50(input_shape = (64, 64, 3), 
-             weights='imagenet',
+             weights= None,
              classes = 1000,
              include_top = True, 
              pooling = None):
@@ -14,6 +14,21 @@ def ResNet50(input_shape = (64, 64, 3),
     Arguments:
     input_shape -- shape of the images of the dataset
     classes -- integer, number of classes
+    weights: one of `None` (random initialization)
+            or "imagenet" (pre-training on ImageNet).
+    pooling: Optional pooling mode for feature extraction
+            when `include_top` is `False`.
+            - `None` means that the output of the model will be
+                the 4D tensor output of the
+                last convolutional layer.
+            - `avg` means that global average pooling
+                will be applied to the output of the
+                last convolutional layer, and thus
+                the output of the model will be a 2D tensor.
+            - `max` means that global max pooling will
+                be applied.
+    include_top: whether to include the fully-connected
+            layer at the top of the network.
 
     Returns:
     model -- a Model() instance in Keras
