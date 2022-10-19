@@ -1,7 +1,7 @@
 from blocks import *
 from keras.utils.data_utils import get_file
 
-def ResNet50(input_shape = (64, 64, 3), 
+def ResNet50(input_shape = (224, 224, 3), 
              weights= None,
              classes = 1000,
              include_top = True, 
